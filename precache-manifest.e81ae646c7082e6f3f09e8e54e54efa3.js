@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "921c737d5f0afc88c0d491b0557f6e4c",
+    "revision": "b56fa4651d059efee6693fa368e03738",
     "url": "/word-saver/index.html"
   },
   {
-    "revision": "ea2144a2f2f2844b5188",
+    "revision": "3748f81977ed54fba57f",
     "url": "/word-saver/static/css/main.f3e2a2aa.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/word-saver/static/js/2.c2c605b3.chunk.js"
   },
   {
-    "revision": "ea2144a2f2f2844b5188",
-    "url": "/word-saver/static/js/main.5d9cea5e.chunk.js"
+    "revision": "3748f81977ed54fba57f",
+    "url": "/word-saver/static/js/main.26bdc252.chunk.js"
   },
   {
     "revision": "19323843d2921b256526",

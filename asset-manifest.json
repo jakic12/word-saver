@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/word-saver/static/css/main.f3e2a2aa.chunk.css",
+    "main.js": "/word-saver/static/js/main.a99a4fd7.chunk.js",
+    "main.js.map": "/word-saver/static/js/main.a99a4fd7.chunk.js.map",
+    "runtime-main.js": "/word-saver/static/js/runtime-main.91720b33.js",
+    "runtime-main.js.map": "/word-saver/static/js/runtime-main.91720b33.js.map",
+    "static/js/2.c2c605b3.chunk.js": "/word-saver/static/js/2.c2c605b3.chunk.js",
+    "static/js/2.c2c605b3.chunk.js.map": "/word-saver/static/js/2.c2c605b3.chunk.js.map",
+    "index.html": "/word-saver/index.html",
+    "precache-manifest.5ee8ff81c94a30e7d808eaaea1ebe8b2.js": "/word-saver/precache-manifest.5ee8ff81c94a30e7d808eaaea1ebe8b2.js",
+    "service-worker.js": "/word-saver/service-worker.js",
+    "static/css/main.f3e2a2aa.chunk.css.map": "/word-saver/static/css/main.f3e2a2aa.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.91720b33.js",
+    "static/js/2.c2c605b3.chunk.js",
+    "static/css/main.f3e2a2aa.chunk.css",
+    "static/js/main.a99a4fd7.chunk.js"
+  ]
+}

@@ -1,0 +1,160 @@
+.wordCards {
+  position: relative;
+  overflow: auto;
+  .error {
+    background: #e74c3c;
+    margin: 1em;
+    padding: 1em;
+    .message {
+      color: white;
+    }
+  }
+  .loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .wordCard {
+    background: white;
+    margin: 1em;
+    padding: 1em;
+    .head {
+      padding-left: 1em;
+      margin: 1em 0 2em 0;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .title {
+        flex-shrink: 1;
+        flex-grow: 1;
+        min-width: 0;
+        .word {
+          margin: 0.1em 0;
+          overflow: hidden;
+          overflow-wrap: break-word;
+          hyphens: auto;
+        }
+
+        .phonetic {
+          color: rgb(83, 83, 83);
+        }
+      }
+      .wordSaved {
+        padding: 1em;
+        display: inline-block;
+        &:hover {
+          cursor: pointer;
+        }
+        img {
+          float: right;
+          width: 1em;
+          height: 1em;
+        }
+      }
+    }
+
+    .meanings {
+      .meaning {
+        .meaningHead {
+          font-style: italic;
+        }
+
+        .definitions {
+          ol {
+            li {
+              margin: 1em 0;
+              .definition {
+                font-weight: 600;
+              }
+
+              .example {
+                padding-left: 0.6em;
+                color: rgb(107, 107, 107);
+              }
+
+              .synonymsWrapper {
+                display: flex;
+                flex-direction: row;
+                .synonyms {
+                  min-width: 0;
+                  overflow: hidden;
+                  flex-shrink: 1;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  max-height: 2.92em;
+                  transition: max-height 0.5s;
+                  .similar {
+                    color: #29c5ff;
+                  }
+                  .synonymBlock {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    height: 2.92em;
+                    .synonym {
+                      height: 1.32em;
+                      margin-left: 0.6em;
+                      border-radius: 1em/50%;
+                      border: 1px solid rgb(218, 218, 218);
+                      white-space: nowrap;
+                      padding: 0.2em 1em;
+                      font-size: 1em;
+                      &:hover {
+                        cursor: pointer;
+                        background: rgb(218, 218, 218);
+                      }
+                    }
+                  }
+
+                  &.open {
+                  }
+                }
+
+                .openCloseButtonWrapper {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  height: 2.92em;
+                  .openCloseButton {
+                    height: 0.52em;
+                    flex-shrink: 0;
+                    margin-left: 0.6em;
+                    border-radius: 1em/50%;
+                    border: 1px solid rgb(218, 218, 218);
+                    padding: 0.6em;
+                    img {
+                      transition: transform 0.5s;
+                      transform: rotate(90deg);
+                      display: block;
+                      height: 0.6em;
+                      width: 0.6em;
+                    }
+                    &.open {
+                      img {
+                        transform: rotate(-90deg);
+                      }
+                    }
+                    &:hover {
+                      cursor: pointer;
+                      background: rgb(218, 218, 218);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

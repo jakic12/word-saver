@@ -31,10 +31,17 @@ export const fetchWord = (dispatch, word) => {
   dispatch(requestWord());
   fetch(api_url(word))
     .then(async res => {
-      if (!res.ok) throw `Word not found`;
+      if (!res.ok) throw { message: `Word not found`, userError: true };
       dispatch(wordSuccess(await res.json()));
     })
     .catch(e => {
-      dispatch(wordRequestError(e));
+      console.error(e);
+      if (e.userError) dispatch(wordRequestError(e.message));
+      else
+        dispatch(
+          wordRequestError(
+            `Internal error, that means something inside isn't working. Try again`
+          )
+        );
     });
 };

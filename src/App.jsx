@@ -18,8 +18,7 @@ const screens = [
     label: "Landing",
     path: "/",
     exact: true,
-    component: MainPage,
-    topBar: true
+    component: MainPage
   },
   { label: "App", path: "/login", exact: true, component: Login, topBar: true },
   { path: "/app", exact: true, component: MainApp }
@@ -29,10 +28,15 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <TopBar screens={screens.filter(e => e.topBar)} />
+        {/*<TopBar screens={screens.filter(e => e.topBar)} />*/}
         <div className="pageContent">
-          {screens.map(e => (
-            <Route path={e.path} exact={e.exact} component={e.component} />
+          {screens.map((e, i) => (
+            <Route
+              path={e.path}
+              exact={e.exact}
+              component={e.component}
+              key={`route_${i}`}
+            />
           ))}
         </div>
       </div>

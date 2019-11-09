@@ -23,7 +23,7 @@ export default (state = initialState, action) => {
       });
     case REMOVE_WORD:
       const newWords1 = Array.from(state.savedWords).filter(
-        e => e != action.word
+        e => JSON.stringify(e) !== JSON.stringify(action.word)
       );
       return Object.assign({}, state, {
         savedWords: newWords1

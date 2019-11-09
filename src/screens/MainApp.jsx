@@ -11,21 +11,63 @@ import { Redirect } from "react-router-dom";
 
 // components
 import Card from "../components/Card";
-import { Ripple } from "react-awesome-spinners";
+import WordsDisplay from "../components/WordsDisplay";
 
-// resources
-import arrow from "../res/arrow-point-to-right.png";
+const tabs = [
+  {
+    label: `Search`,
+    render: props => <WordsWithSearch {...props} />
+  },
+  {
+    label: `Saved Words`,
+    render: props => (
+      <WordsDisplay
+        getWord={props.getWord}
+        addWord={props.addWord}
+        removeWord={props.removeWord}
+        status={props.words}
+        savedWords={props.words.savedWords}
+        wordsToDisplay={props.words.savedWords}
+      />
+    )
+  }
+];
 
-const MainApp = ({ account, words, addWord, getWord }) => {
+const MainApp = props => {
+  const { account, words, addWord, getWord, removeWord } = props;
+  const [selectedTab, setSelectedTab] = useState(0);
   const [wordInput, setWordInput] = useState("");
+
   if (
     (!account.userData && account.useAccount) ||
     account.useAccount === null
   ) {
     return <Redirect to={`/login`} />;
   }
+
   return (
     <div className="mainApp">
+      <div className="mainAppBody">{tabs[selectedTab].render(props)}</div>
+      <div className="bottomBar">
+        {tabs.map((tab, i) => (
+          <div
+            className={`tab${selectedTab == i ? ` selected` : ``}`}
+            onClick={() => setSelectedTab(i)}
+            key={`tab_button_${i}`}
+          >
+            {tab.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const WordsWithSearch = ({ words, addWord, getWord, removeWord }) => {
+  const [wordInput, setWordInput] = useState("");
+
+  return (
+    <>
       <div className="topSearch">
         <Card>
           <form
@@ -39,95 +81,20 @@ const MainApp = ({ account, words, addWord, getWord }) => {
             <input
               type="text"
               value={wordInput}
-              onInput={e => setWordInput(e.target.value)}
+              onChange={e => setWordInput(e.target.value)}
             />
           </form>
         </Card>
       </div>
-      <div className="wordCards">
-        {!words.wordLoading &&
-          words.wordsShowing.map(word => {
-            return (
-              <Card className="wordCard">
-                <div className="head">
-                  <h1 className="word">{word.word}</h1>
-                  <div className="phonetic">{word.phonetic}</div>
-                </div>
-                <div className="meanings">
-                  {Object.keys(word.meaning).map(word_type => {
-                    return (
-                      <div className="meaning">
-                        <div className="meaningHead">{word_type}</div>
-                        <div className="definitions">
-                          <ol>
-                            {word.meaning[word_type].map(definition => (
-                              <li>
-                                <div className="definition">
-                                  {definition.definition}
-                                </div>
-                                {definition.example && (
-                                  <div className="example">
-                                    {`"${definition.example}"`}
-                                  </div>
-                                )}
-                                {definition.synonyms && (
-                                  <Synonyms synonyms={definition.synonyms} />
-                                )}
-                              </li>
-                            ))}
-                          </ol>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card>
-            );
-          })}
-        {words.wordLoading && (
-          <div className="loading">
-            <Ripple />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const Synonyms = ({ synonyms }) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="synonymsWrapper">
-      <div
-        className={`synonyms${open ? " open" : ""}`}
-        style={
-          open
-            ? {
-                "max-height": `calc(${
-                  synonyms.length > 0 ? synonyms.length : 1
-                } * 2.92em)`
-              }
-            : {}
-        }
-      >
-        <div className="synonymBlock">
-          <div className="similar">Similar:</div>
-        </div>
-        {synonyms.map(synonym => (
-          <div className="synonymBlock">
-            <div className="synonym">{synonym}</div>
-          </div>
-        ))}
-      </div>
-      <div className="openCloseButtonWrapper">
-        <div
-          className={`openCloseButton${open ? " open" : ""}`}
-          onClick={() => setOpen(!open)}
-        >
-          <img src={arrow} alt="arrow" />
-        </div>
-      </div>
-    </div>
+      <WordsDisplay
+        getWord={getWord}
+        addWord={addWord}
+        removeWord={removeWord}
+        status={words}
+        savedWords={words.savedWords}
+        wordsToDisplay={words.wordsShowing}
+      />
+    </>
   );
 };
 

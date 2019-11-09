@@ -14,8 +14,8 @@ const TopBar = ({ screens }) => {
     <div className="topBar">
       <nav>
         {screens &&
-          screens.map(e => (
-            <Link className="navLink" to={e.path}>
+          screens.map((e, i) => (
+            <Link className="navLink" to={e.path} key={`topBarLink_${i}`}>
               {e.label}
             </Link>
           ))}

@@ -15,6 +15,11 @@
       .wrapper {
       }
 
+      &:hover {
+        background-color: #c5d3e2;
+        cursor: pointer;
+      }
+
       &:not(:first-child) {
         border-top: dashed black 1px;
       }

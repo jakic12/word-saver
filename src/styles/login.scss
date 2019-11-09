@@ -1,0 +1,23 @@
+.login {
+  height: 100%;
+  .useAccountSelection {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .selectionType {
+      height: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .wrapper {
+      }
+
+      &:not(:first-child) {
+        border-top: dashed black 1px;
+      }
+    }
+  }
+}

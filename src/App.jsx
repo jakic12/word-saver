@@ -14,13 +14,13 @@ import Login from "./screens/Login";
 import TopBar from "./components/TopBar";
 
 const screens = [
-  {
+  /*{
     label: "Landing",
     path: "/",
     exact: true,
     component: MainPage
-  },
-  { label: "App", path: "/login", exact: true, component: Login, topBar: true },
+  },*/
+  { label: "App", path: "/", exact: true, component: Login, topBar: true },
   { path: "/app", exact: true, component: MainApp }
 ];
 

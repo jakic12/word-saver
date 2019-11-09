@@ -3,7 +3,7 @@ import React from "react";
 import "./styles/App.scss";
 
 // libs
-import { BrowserRouter, Route } from "react-router-dom";
+import { HashRouter, Route, Redirect } from "react-router-dom";
 
 // screens
 import MainPage from "./screens/MainPage";
@@ -14,19 +14,31 @@ import Login from "./screens/Login";
 import TopBar from "./components/TopBar";
 
 const screens = [
-  /*{
-    label: "Landing",
+  {
+    label: "redirectRoot",
     path: "/",
     exact: true,
+    component: props => <Redirect to={`/login`} />
+  },
+  {
+    label: "Landing",
+    path: "/landing",
+    exact: true,
     component: MainPage
-  },*/
-  { label: "App", path: "/", exact: true, component: Login, topBar: true },
-  { path: "/app", exact: true, component: MainApp }
+  },
+  {
+    label: "App",
+    path: `/login`,
+    exact: true,
+    component: Login,
+    topBar: true
+  },
+  { path: `/app`, exact: true, component: MainApp }
 ];
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter basename={`/`}>
       <div className="App">
         {/*<TopBar screens={screens.filter(e => e.topBar)} />*/}
         <div className="pageContent">
@@ -40,7 +52,7 @@ function App() {
           ))}
         </div>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

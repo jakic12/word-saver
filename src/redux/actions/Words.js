@@ -3,6 +3,7 @@ export const REMOVE_WORD = "REMOVE_WORD";
 export const WORD_REQUEST = "WORD_REQUEST";
 export const WORD_SUCCESS = "WORD_SUCCESS";
 export const WORD_ERROR = "WORD_ERROR";
+export const REFRESH_STATE = "REFRESH_STATE";
 
 const api_url = word =>
   `https://googledictionaryapi.eu-gb.mybluemix.net/?define=${word}`;
@@ -25,6 +26,10 @@ export const wordRequestError = error => {
 
 export const wordSuccess = word => {
   return { type: WORD_SUCCESS, word };
+};
+
+export const refreshState = state => {
+  return { type: REFRESH_STATE, state };
 };
 
 export const fetchWord = (dispatch, word) => {

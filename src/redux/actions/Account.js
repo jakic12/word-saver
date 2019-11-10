@@ -1,3 +1,6 @@
+// firebase
+import firebase from "../../firebase/firebase";
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -21,12 +24,16 @@ export const setUseAccount = value => {
 };
 
 export const fetchLogin = (dispatch, user, pass) => {
-  dispatch(loginRequest);
+  dispatch(loginRequest());
   setTimeout(() => {
-    if (Math.random() > 0.9) {
-      dispatch(loginFail(`This is a test error, please do not fix it`));
-    } else {
-      dispatch(loginSuccess({ user, pass }));
-    }
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(user, pass)
+      .then(authUser => {
+        dispatch(loginSuccess(authUser));
+      })
+      .catch(function(error) {
+        dispatch(loginFail(error.message));
+      });
   }, 2000);
 };

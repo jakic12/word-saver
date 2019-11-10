@@ -16,25 +16,25 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
-      return {
+      return Object.assign({}, state, {
         userData: null,
         isLoggingIn: true,
         error: null
-      };
+      });
 
     case LOGIN_SUCCESS:
-      return {
+      return Object.assign({}, state, {
         userData: action.userData,
         isLoggingIn: false,
         error: null
-      };
+      });
 
     case LOGIN_FAIL:
-      return {
+      return Object.assign({}, state, {
         userData: null,
         isLoggingIn: false,
         error: action.error
-      };
+      });
 
     case USE_ACCOUNT:
       return Object.assign({}, state, {

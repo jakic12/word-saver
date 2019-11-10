@@ -7,17 +7,38 @@ import { connect } from "react-redux";
 import { fetchLogin, setUseAccount } from "../redux/actions/Account";
 
 // router
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
+
+// components
+import LoginForm from "../components/LoginForm";
+import Register from "../components/Register";
+import PasswordReset from "../components/PasswordReset";
 
 const Login = ({ useAccount, setUseAccount }) => {
-  console.log(setUseAccount);
+  console.log(useAccount);
   return (
     <div className="login">
       {useAccount === null && (
         <SelectUseAccount setAccountCallback={setUseAccount} />
       )}
 
-      {useAccount !== null && <Redirect to={"/app"} />}
+      {useAccount !== null && !useAccount && <Redirect to={"/app"} />}
+      {useAccount !== null && useAccount && (
+        <div style={{ height: `100%`, width: `100%` }}>
+          <Route
+            path={`/login`}
+            exact={true}
+            render={props => (
+              <LoginForm {...props} registerUrl={`/login/register`} />
+            )}
+          />
+          <Route
+            path={`/login/register`}
+            render={props => <Register {...props} loginUrl={`/login`} />}
+          />
+          <Route path={`/login/passwordReset`} component={PasswordReset} />
+        </div>
+      )}
     </div>
   );
 };

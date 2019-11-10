@@ -29,7 +29,6 @@ const screens = [
   {
     label: "App",
     path: `/login`,
-    exact: true,
     component: Login,
     topBar: true
   },

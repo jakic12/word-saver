@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../styles/mainApp.scss";
 
@@ -54,14 +54,16 @@ const MainApp = props => {
   const [wordInput, setWordInput] = useState("");
 
   const cache = new CacheManager();
-  cache.readData(`words_state`).then(words_state => {
-    if (!words_state) {
-      cache.writeData(`words_state`, words);
-      return;
-    } else {
-      refreshWordState(words_state);
-    }
-  });
+  useEffect(() => {
+    cache.readData(`words_state`).then(words_state => {
+      if (!words_state) {
+        cache.writeData(`words_state`, words);
+        return;
+      } else {
+        refreshWordState(words_state);
+      }
+    });
+  }, []);
 
   if (
     (!account.userData && account.useAccount) ||

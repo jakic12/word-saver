@@ -1,10 +1,9 @@
 export const WORD_REQUEST = "WORD_REQUEST";
 export const WORD_SUCCESS = "WORD_SUCCESS";
 export const WORD_ERROR = "WORD_ERROR";
-export const REFRESH_STATE = "REFRESH_STATE";
 
 const api_url = word =>
-  `https://googledictionaryapi.eu-gb.mybluemix.net/?define=${word}`;
+  `https://googledictionaryapi.eu-gb.mybluemix.net/?define=${encodeURI(word)}`;
 export const requestWord = () => {
   return { type: WORD_REQUEST };
 };
@@ -15,10 +14,6 @@ export const wordRequestError = error => {
 
 export const wordSuccess = word => {
   return { type: WORD_SUCCESS, word };
-};
-
-export const refreshState = state => {
-  return { type: REFRESH_STATE, state };
 };
 
 export const fetchWord = (dispatch, word) => {

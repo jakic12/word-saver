@@ -52,10 +52,22 @@
         &:hover {
           cursor: pointer;
         }
-        img {
+        &.saveLoading {
+          .wordSavedStatus {
+            width: 2em;
+            height: 2em;
+          }
+          &:hover {
+            cursor: auto !important;
+          }
+        }
+        .wordSavedStatus {
           float: right;
-          width: 1em;
-          height: 1em;
+
+          img {
+            width: 1em;
+            height: 1em;
+          }
         }
       }
     }

@@ -4,12 +4,13 @@ import "../styles/mainApp.scss";
 
 // redux
 import { connect } from "react-redux";
+import { fetchWord } from "../redux/actions/Words";
+
 import {
-  addWord,
-  removeWord,
-  fetchWord,
-  refreshState
-} from "../redux/actions/Words";
+  addSavedWord,
+  removeSavedWord,
+  refreshState as refreshSavedWordsState
+} from "../redux/actions/SavedWords";
 
 // local storage
 import CacheManager from "../cache";
@@ -24,7 +25,18 @@ import WordsDisplay from "../components/WordsDisplay";
 const tabs = [
   {
     label: `Search`,
-    render: props => <WordsWithSearch {...props} />
+    render: props => (
+      <WordsWithSearch
+        getWord={props.getWord}
+        addWord={props.addWord}
+        removeWord={props.removeWord}
+        status={props.words}
+        savedWordsStatus={props.savedWords}
+        savedWords={props.savedWords.savedWords}
+        wordsToDisplay={props.words.wordsShowing}
+        local={!props.account.useAccount}
+      />
+    )
   },
   {
     label: `Saved Words`,
@@ -33,34 +45,28 @@ const tabs = [
         getWord={props.getWord}
         addWord={props.addWord}
         removeWord={props.removeWord}
-        status={props.words}
-        savedWords={props.words.savedWords}
-        wordsToDisplay={props.words.savedWords}
+        status={props.savedWords}
+        savedWordsStatus={props.savedWords}
+        savedWords={props.savedWords.savedWords}
+        wordsToDisplay={props.savedWords.savedWords}
+        local={!props.account.useAccount}
       />
     )
   }
 ];
 
 const MainApp = props => {
-  const {
-    account,
-    words,
-    addWord,
-    getWord,
-    removeWord,
-    refreshWordState
-  } = props;
+  const { account, words, savedWords, refreshSavedWordsState } = props;
   const [selectedTab, setSelectedTab] = useState(0);
-  const [wordInput, setWordInput] = useState("");
 
   const cache = new CacheManager();
   useEffect(() => {
-    cache.readData(`words_state`).then(words_state => {
-      if (!words_state) {
-        cache.writeData(`words_state`, words);
+    cache.readData(`saved_words_state`).then(saved_words_state => {
+      if (!saved_words_state) {
+        cache.writeData(`saved_words_state`, savedWords);
         return;
       } else {
-        refreshWordState(words_state);
+        refreshSavedWordsState(saved_words_state);
       }
     });
   }, []);
@@ -90,7 +96,8 @@ const MainApp = props => {
   );
 };
 
-const WordsWithSearch = ({ words, addWord, getWord, removeWord }) => {
+const WordsWithSearch = props => {
+  const { getWord } = props;
   const [wordInput, setWordInput] = useState("");
 
   return (
@@ -113,14 +120,7 @@ const WordsWithSearch = ({ words, addWord, getWord, removeWord }) => {
           </form>
         </Card>
       </div>
-      <WordsDisplay
-        getWord={getWord}
-        addWord={addWord}
-        removeWord={removeWord}
-        status={words}
-        savedWords={words.savedWords}
-        wordsToDisplay={words.wordsShowing}
-      />
+      <WordsDisplay {...props} />
     </>
   );
 };
@@ -131,10 +131,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addWord: word => dispatch(addWord(word)),
-    removeWord: word => dispatch(removeWord(word)),
+    addWord: (word, index, local) => addSavedWord(dispatch, word, index, local),
+    removeWord: (word, index, local) =>
+      removeSavedWord(dispatch, word, index, local),
     getWord: word => fetchWord(dispatch, word),
-    refreshWordState: state => dispatch(refreshState(state))
+    refreshSavedWordsState: state => dispatch(refreshSavedWordsState(state))
   };
 };
 

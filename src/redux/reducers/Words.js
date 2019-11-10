@@ -1,11 +1,4 @@
-import CacheManager from "../../cache/";
-
-import {
-  WORD_REQUEST,
-  WORD_SUCCESS,
-  WORD_ERROR,
-  REFRESH_STATE
-} from "../actions/Words";
+import { WORD_REQUEST, WORD_SUCCESS, WORD_ERROR } from "../actions/Words";
 
 const initialState = {
   wordLoading: false,
@@ -36,8 +29,6 @@ export default (state = initialState, action) => {
         wordsShowing: Array.from(state.wordsShowing).concat(action.word)
       });
       return newState;
-    case REFRESH_STATE:
-      return action.state;
     default:
       return state;
   }

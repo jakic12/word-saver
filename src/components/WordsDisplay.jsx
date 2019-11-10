@@ -4,7 +4,7 @@ import "../styles/wordsDisplay.scss";
 
 // components
 import Card from "../components/Card";
-import { Ripple } from "react-awesome-spinners";
+import { Ripple, Ring } from "react-awesome-spinners";
 
 // resources
 import arrow from "../res/arrow-point-to-right.png";
@@ -17,7 +17,9 @@ const WordsDisplay = ({
   removeWord,
   status,
   savedWords,
-  wordsToDisplay
+  wordsToDisplay,
+  savedWordsStatus,
+  local
 }) => {
   const selectWord = word => {
     getWord(word);
@@ -46,6 +48,9 @@ const WordsDisplay = ({
         !status.wordLoading &&
         wordsToDisplay.map((word, word_i) => {
           const isWordSaved = wordSaved(word);
+          const saveLoading =
+            savedWordsStatus.addWordLoading[word_i] ||
+            savedWordsStatus.removeWordLoading[word_i];
           return (
             <Card className="wordCard" key={`word_${word_i}`}>
               <div className="head">
@@ -54,15 +59,24 @@ const WordsDisplay = ({
                   <div className="phonetic">{word.phonetic}</div>
                 </div>
                 <div
-                  className="wordSaved"
+                  className={`wordSaved${saveLoading ? ` saveLoading` : ``}`}
                   onClick={() =>
-                    isWordSaved ? removeWord(word) : addWord(word)
+                    !saveLoading
+                      ? isWordSaved
+                        ? removeWord(word, word_i, local)
+                        : addWord(word, word_i, local)
+                      : null
                   }
                 >
-                  <img
-                    src={isWordSaved ? unchecked : plus}
-                    alt="wordSavedStatus"
-                  />
+                  <div className={`wordSavedStatus`}>
+                    {!saveLoading && (
+                      <img
+                        src={isWordSaved ? unchecked : plus}
+                        alt="wordSavedStatus"
+                      />
+                    )}
+                    {saveLoading && <Ring size={2} sizeUnit={`em`} />}
+                  </div>
                 </div>
               </div>
               <div className="meanings">

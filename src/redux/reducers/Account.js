@@ -3,7 +3,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   USE_ACCOUNT,
-  USE_LOCAL
+  USE_LOCAL,
+  SET_USER,
+  LOGOUT
 } from "../actions/Account";
 
 const initialState = {
@@ -44,6 +46,16 @@ export default (state = initialState, action) => {
     case USE_LOCAL:
       return Object.assign({}, state, {
         useAccount: false
+      });
+
+    case SET_USER:
+      return Object.assign({}, state, {
+        userData: action.userData
+      });
+
+    case LOGOUT:
+      return Object.assign({}, state, {
+        userData: null
       });
 
     default:

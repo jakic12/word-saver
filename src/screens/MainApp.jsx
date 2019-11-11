@@ -5,6 +5,7 @@ import "../styles/mainApp.scss";
 // redux
 import { connect } from "react-redux";
 import { fetchWord } from "../redux/actions/Words";
+import { setUseAccount } from "../redux/actions/Account";
 
 import {
   addSavedWord,
@@ -21,6 +22,7 @@ import { Redirect } from "react-router-dom";
 // components
 import Card from "../components/Card";
 import WordsDisplay from "../components/WordsDisplay";
+import AccountSettings from "./AccountSettings";
 
 const tabs = [
   {
@@ -50,6 +52,15 @@ const tabs = [
         savedWords={props.savedWords.savedWords}
         wordsToDisplay={props.savedWords.savedWords}
         local={!props.account.useAccount}
+      />
+    )
+  },
+  {
+    label: `Account`,
+    render: props => (
+      <AccountSettings
+        userData={props.account.userData}
+        setUseAccountCallback={props.useAccount}
       />
     )
   }
@@ -135,7 +146,8 @@ const mapDispatchToProps = dispatch => {
     removeWord: (word, index, local) =>
       removeSavedWord(dispatch, word, index, local),
     getWord: word => fetchWord(dispatch, word),
-    refreshSavedWordsState: state => dispatch(refreshSavedWordsState(state))
+    refreshSavedWordsState: state => dispatch(refreshSavedWordsState(state)),
+    useAccount: () => dispatch(setUseAccount(true))
   };
 };
 

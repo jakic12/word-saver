@@ -4,7 +4,12 @@ import "../styles/login.scss";
 
 // redux
 import { connect } from "react-redux";
-import { fetchLogin, setUseAccount } from "../redux/actions/Account";
+import {
+  fetchLogin,
+  setUseAccount,
+  setUser,
+  logOut
+} from "../redux/actions/Account";
 
 // router
 import { Redirect, Route } from "react-router-dom";
@@ -14,15 +19,26 @@ import LoginForm from "../components/LoginForm";
 import Register from "../components/Register";
 import PasswordReset from "../components/PasswordReset";
 
+// firebase
+import firebase from "../firebase/firebase";
+
 const Login = ({
   useAccount,
   setUseAccount,
   error,
   login,
   userData,
-  isLoggingIn
+  setUser,
+  isLoggingIn,
+  logOutUser
 }) => {
-  console.log(useAccount);
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      setUser(user);
+    } else {
+      logOutUser();
+    }
+  });
   return (
     <div className="login">
       {useAccount === null && (
@@ -97,6 +113,12 @@ const mapDispatchToProps = dispatch => {
     },
     setUseAccount: value => {
       dispatch(setUseAccount(value));
+    },
+    setUser: userData => {
+      dispatch(setUser(userData));
+    },
+    logOutUser: () => {
+      dispatch(logOut());
     }
   };
 };

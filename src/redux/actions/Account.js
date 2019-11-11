@@ -6,9 +6,19 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const USE_ACCOUNT = "USE_ACCOUNT";
 export const USE_LOCAL = "USE_LOCAL";
+export const SET_USER = "SET_USER";
+export const LOGOUT = "LOGOUT";
 
 export const loginRequest = () => {
   return { type: LOGIN_REQUEST };
+};
+
+export const logOut = () => {
+  return { type: LOGOUT };
+};
+
+export const setUser = userData => {
+  return { type: SET_USER, userData };
 };
 
 export const loginSuccess = userData => {

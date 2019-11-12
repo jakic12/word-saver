@@ -19,7 +19,8 @@ const WordsDisplay = ({
   savedWords,
   wordsToDisplay,
   savedWordsStatus,
-  local
+  local,
+  hideWordError
 }) => {
   const selectWord = word => {
     getWord(word);
@@ -28,13 +29,53 @@ const WordsDisplay = ({
   const wordSaved = word => {
     if (savedWords && savedWords.length > 0) {
       return (
-        savedWords.filter(
-          savedWord => JSON.stringify(word) === JSON.stringify(savedWord)
-        ).length > 0
+        savedWords.filter(savedWord => {
+          if (word.uid || savedWord.uid) {
+            if (word.uid) {
+              word = JSON.parse(JSON.stringify(word));
+              delete word.uid;
+            }
+
+            if (savedWord.uid) {
+              savedWord = JSON.parse(JSON.stringify(savedWord));
+              delete savedWord.uid;
+            }
+          }
+          return deepEquals(savedWord, word);
+        }).length > 0
       );
     }
 
     return false;
+  };
+
+  const deepEquals = (object1, object2) => {
+    if (!object1 || !object2) {
+      return false;
+    }
+    if (
+      typeof object1 === "object" &&
+      object1 !== null &&
+      object1 !== undefined
+    ) {
+      if (Object.keys(object1).length !== Object.keys(object2).length)
+        return false;
+
+      Object.keys(object1).forEach(key => {
+        if (!deepEquals(object1[key], object2[key])) return false;
+      });
+      return true;
+    } else {
+      if (
+        typeof object2 === "object" &&
+        object2 !== null &&
+        object2 !== undefined
+      ) {
+        // if object1 is object and object2 isn't
+        return false;
+      }
+      return object1 === object2;
+    }
   };
 
   return (
@@ -51,6 +92,18 @@ const WordsDisplay = ({
           const saveLoading =
             savedWordsStatus.addWordLoading[word_i] ||
             savedWordsStatus.removeWordLoading[word_i];
+
+          const wordSaveError =
+            (savedWordsStatus &&
+              savedWordsStatus.addWordError &&
+              savedWordsStatus.addWordError[word_i]) ||
+            (savedWordsStatus &&
+              savedWordsStatus.removeWordError &&
+              savedWordsStatus.removeWordError[word_i]);
+          if (wordSaveError)
+            setTimeout(() => {
+              hideWordError(word_i);
+            }, 5000);
           return (
             <Card className="wordCard" key={`word_${word_i}`}>
               <div className="head">
@@ -69,6 +122,12 @@ const WordsDisplay = ({
                   }
                 >
                   <div className={`wordSavedStatus`}>
+                    {wordSaveError && (
+                      <div className="wordSavedError">
+                        {savedWordsStatus.addWordError[word_i] ||
+                          savedWordsStatus.removeWordError[word_i]}
+                      </div>
+                    )}
                     {!saveLoading && (
                       <img
                         src={isWordSaved ? unchecked : plus}

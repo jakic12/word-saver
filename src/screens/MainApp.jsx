@@ -10,7 +10,9 @@ import { setUseAccount } from "../redux/actions/Account";
 import {
   addSavedWord,
   removeSavedWord,
-  refreshState as refreshSavedWordsState
+  refreshState as refreshSavedWordsState,
+  hideError,
+  refreshSavedWords
 } from "../redux/actions/SavedWords";
 
 // local storage
@@ -23,6 +25,11 @@ import { Redirect } from "react-router-dom";
 import Card from "../components/Card";
 import WordsDisplay from "../components/WordsDisplay";
 import AccountSettings from "./AccountSettings";
+
+//firebase
+import firebase from "../firebase/firebase";
+
+const cache = new CacheManager();
 
 const tabs = [
   {
@@ -37,6 +44,7 @@ const tabs = [
         savedWords={props.savedWords.savedWords}
         wordsToDisplay={props.words.wordsShowing}
         local={!props.account.useAccount}
+        hideWordError={props.hideWordError}
       />
     )
   },
@@ -52,6 +60,7 @@ const tabs = [
         savedWords={props.savedWords.savedWords}
         wordsToDisplay={props.savedWords.savedWords}
         local={!props.account.useAccount}
+        hideWordError={props.hideWordError}
       />
     )
   },
@@ -61,6 +70,37 @@ const tabs = [
       <AccountSettings
         userData={props.account.userData}
         setUseAccountCallback={props.useAccount}
+        getCloudSavedWords={() =>
+          new Promise((resolve, reject) => {
+            if (props.account.useAccount) {
+              firebase
+                .database()
+                .ref("user-saves/" + firebase.auth().currentUser.uid)
+                .once("value", snapshot => {
+                  const out = snapshot.val();
+                  if (out) {
+                    const array = Object.keys(out).map(k => {
+                      out[k].uid = k;
+                      return out[k];
+                    });
+                    console.log(out, array);
+                    resolve(array);
+                  }
+                  resolve();
+                });
+            }
+          })
+        }
+        getLocalSavedWords={() => {
+          return cache.readData(`saved_words_state`).then(
+            data =>
+              new Promise((resolve, reject) => {
+                resolve(data.savedWords);
+              })
+          );
+        }}
+        copyLocalToCloud={undefined}
+        copyCloudToLocal={undefined}
       />
     )
   }
@@ -70,16 +110,40 @@ const MainApp = props => {
   const { account, words, savedWords, refreshSavedWordsState } = props;
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const cache = new CacheManager();
   useEffect(() => {
-    cache.readData(`saved_words_state`).then(saved_words_state => {
-      if (!saved_words_state) {
-        cache.writeData(`saved_words_state`, savedWords);
-        return;
-      } else {
-        refreshSavedWordsState(saved_words_state);
-      }
-    });
+    if (account.useAccount) {
+      firebase
+        .database()
+        .ref("user-saves/" + firebase.auth().currentUser.uid)
+        .on(
+          "value",
+          snapshot => {
+            const out = snapshot.val();
+            if (out) {
+              props.refreshSavedWords(
+                Object.keys(out).map(k => {
+                  out[k].uid = k;
+                  return out[k];
+                })
+              );
+            } else {
+              props.refreshSavedWords([]);
+            }
+          },
+          errorObject => {
+            console.log(`firebase read from database failed`, errorObject);
+          }
+        );
+    } else {
+      cache.readData(`saved_words_state`).then(saved_words_state => {
+        if (!saved_words_state) {
+          cache.writeData(`saved_words_state`, savedWords);
+          return;
+        } else {
+          refreshSavedWordsState(saved_words_state);
+        }
+      });
+    }
   }, []);
 
   if (
@@ -143,15 +207,19 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addWord: (word, index, local) => addSavedWord(dispatch, word, index, local),
-    removeWord: (word, index, local) =>
-      removeSavedWord(dispatch, word, index, local),
+    removeWord: (word, index, local) => {
+      removeSavedWord(dispatch, word, index, local);
+    },
     getWord: word => fetchWord(dispatch, word),
     refreshSavedWordsState: state => dispatch(refreshSavedWordsState(state)),
-    useAccount: () => dispatch(setUseAccount(true))
+    useAccount: () => dispatch(setUseAccount(true)),
+    hideWordError: index => {
+      dispatch(hideError(index));
+    },
+    refreshSavedWords: savedWords => {
+      dispatch(refreshSavedWords(savedWords));
+    }
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MainApp);
+export default connect(mapStateToProps, mapDispatchToProps)(MainApp);

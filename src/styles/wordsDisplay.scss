@@ -63,10 +63,23 @@
         }
         .wordSavedStatus {
           float: right;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
 
           img {
             width: 1em;
             height: 1em;
+          }
+
+          .wordSavedError {
+            padding: 0.3em;
+            margin: 0.6em;
+            border-radius: 3px;
+            background: #e74c3c;
+            font-size: 0.8em;
+            color: white;
           }
         }
       }

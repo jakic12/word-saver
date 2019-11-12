@@ -10,7 +10,9 @@ import {
   SAVED_WORD_REQUEST,
   SAVED_WORD_SUCCESS,
   SAVED_WORD_ERROR,
-  REFRESH_STATE
+  REFRESH_STATE,
+  HIDE_ERRORS,
+  REFRESH_SAVED_WORDS
 } from "../actions/SavedWords";
 
 const initialState = {
@@ -56,7 +58,7 @@ export default (state = initialState, action) => {
 
     case ADD_SAVED_WORD_SUCCESS:
       const newWords = Array.from(state.savedWords);
-      newWords.push(action.word);
+      if (action.add) newWords.push(action.word);
 
       tempArrayLoading = Array.from(state.addWordLoading);
       tempArrayLoading[action.index] = undefined;
@@ -105,9 +107,11 @@ export default (state = initialState, action) => {
       tempArrayError[action.index] = undefined;
 
       newState = Object.assign({}, state, {
-        savedWords: Array.from(state.savedWords).filter(
-          e => JSON.stringify(e) !== JSON.stringify(action.word)
-        ),
+        savedWords: action.remove
+          ? Array.from(state.savedWords).filter(
+              e => JSON.stringify(e) !== JSON.stringify(action.word)
+            )
+          : Array.from(state.savedWords),
         removeWordLoading: tempArrayLoading,
         removeWordError: tempArrayError
       });
@@ -134,8 +138,19 @@ export default (state = initialState, action) => {
       });
       cache.writeData("saved_words_state", newState);
       return newState;
+    case HIDE_ERRORS:
+      return Object.assign({}, state, {
+        removeWordError: state.removeWordError.filter(
+          (e, i) => i != action.index
+        ),
+        addWordError: state.addWordError.filter((e, i) => i != action.index)
+      });
     case REFRESH_STATE:
       return action.state;
+    case REFRESH_SAVED_WORDS:
+      return Object.assign({}, state, {
+        savedWords: Array.from(action.savedWords)
+      });
     default:
       return state;
   }

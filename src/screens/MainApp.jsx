@@ -12,7 +12,9 @@ import {
   removeSavedWord,
   refreshState as refreshSavedWordsState,
   hideError,
-  refreshSavedWords
+  refreshSavedWords,
+  updateLocallySavedWords,
+  updateCloudSavedWords
 } from "../redux/actions/SavedWords";
 
 // local storage
@@ -72,7 +74,7 @@ const tabs = [
         setUseAccountCallback={props.useAccount}
         getCloudSavedWords={() =>
           new Promise((resolve, reject) => {
-            if (props.account.useAccount) {
+            if (firebase.auth().currentUser) {
               firebase
                 .database()
                 .ref("user-saves/" + firebase.auth().currentUser.uid)
@@ -86,7 +88,7 @@ const tabs = [
                     console.log(out, array);
                     resolve(array);
                   }
-                  resolve();
+                  resolve([]);
                 });
             }
           })
@@ -99,8 +101,35 @@ const tabs = [
               })
           );
         }}
-        copyLocalToCloud={undefined}
-        copyCloudToLocal={undefined}
+        copyLocalToCloud={() => {
+          cache.readData(`saved_words_state`).then(saved_words_state => {
+            if (saved_words_state.savedWords) {
+              props.localToCloud(saved_words_state.savedWords);
+            }
+          });
+        }}
+        copyCloudToLocal={() => {
+          firebase
+            .database()
+            .ref("user-saves/" + firebase.auth().currentUser.uid)
+            .once(
+              "value",
+              snapshot => {
+                const out = snapshot.val();
+                if (out) {
+                  props.cloudToLocal(
+                    Object.keys(out).map(k => {
+                      out[k].uid = k;
+                      return out[k];
+                    })
+                  );
+                }
+              },
+              errorObject => {
+                console.log(`firebase read from database failed`, errorObject);
+              }
+            );
+        }}
       />
     )
   }
@@ -218,6 +247,12 @@ const mapDispatchToProps = dispatch => {
     },
     refreshSavedWords: savedWords => {
       dispatch(refreshSavedWords(savedWords));
+    },
+    localToCloud: savedWords => {
+      updateCloudSavedWords(savedWords);
+    },
+    cloudToLocal: savedWords => {
+      dispatch(updateLocallySavedWords(savedWords));
     }
   };
 };

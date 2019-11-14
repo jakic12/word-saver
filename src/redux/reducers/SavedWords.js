@@ -12,7 +12,9 @@ import {
   SAVED_WORD_ERROR,
   REFRESH_STATE,
   HIDE_ERRORS,
-  REFRESH_SAVED_WORDS
+  REFRESH_SAVED_WORDS,
+  UPDATE_LOCAL_SAVED_WORDS,
+  UPDATE_CLOUD_SAVED_WORDS
 } from "../actions/SavedWords";
 
 const initialState = {
@@ -148,6 +150,18 @@ export default (state = initialState, action) => {
     case REFRESH_STATE:
       return action.state;
     case REFRESH_SAVED_WORDS:
+      return Object.assign({}, state, {
+        savedWords: Array.from(action.savedWords)
+      });
+    case UPDATE_LOCAL_SAVED_WORDS:
+      newState = Object.assign({}, state, {
+        savedWords: Array.from(action.savedWords)
+      });
+      cache.writeData("saved_words_state", newState);
+      return Object.assign({}, state, {
+        savedWords: Array.from(action.savedWords)
+      });
+    case UPDATE_CLOUD_SAVED_WORDS:
       return Object.assign({}, state, {
         savedWords: Array.from(action.savedWords)
       });

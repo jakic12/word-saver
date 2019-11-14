@@ -16,6 +16,9 @@ export const REFRESH_STATE = "SAVED_WORD_REFRESH_STATE";
 export const REFRESH_SAVED_WORDS = "REFRESH_SAVED_WORDS";
 export const HIDE_ERRORS = "HIDE_ERRORS";
 
+export const UPDATE_LOCAL_SAVED_WORDS = "UPDATE_LOCAL_SAVED_WORDS";
+export const UPDATE_CLOUD_SAVED_WORDS = "UPDATE_CLOUD_SAVED_WORDS";
+
 const deepEquals = (object1, object2) => {
   if (!object1 || !object2) {
     return false;
@@ -181,6 +184,18 @@ export const removeSavedWord = (dispatch, word, index, local) => {
         );
     }
   }
+};
+
+export const updateLocallySavedWords = savedWords => {
+  return { type: UPDATE_LOCAL_SAVED_WORDS, savedWords };
+};
+
+export const updateCloudSavedWords = savedWords => {
+  console.log(savedWords);
+  firebase
+    .database()
+    .ref("user-saves/" + firebase.auth().currentUser.uid)
+    .set(savedWords);
 };
 
 export const refreshState = state => {

@@ -62,24 +62,42 @@ const AccountSettings = ({
             localSavedWords &&
             Array.isArray(cloudSavedWords) &&
             Array.isArray(localSavedWords) && (
-              <div className="data">
-                <div className="local">
-                  <div className="localHeader">Saved locally:</div>
-                  {localSavedWords.map((word, word_i) => (
-                    <div key={`local_${word_i}`} className="word">
-                      {word.word}
-                    </div>
-                  ))}
+              <>
+                <div className="data">
+                  <div className="local">
+                    <div className="localHeader">Saved locally:</div>
+                    {localSavedWords.map((word, word_i) => (
+                      <div key={`local_${word_i}`} className="word">
+                        {word.word}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="cloud">
+                    <div className="cloudHeader">Saved on the cloud:</div>
+                    {cloudSavedWords.map((word, word_i) => (
+                      <div key={`cloud_${word_i}`} className="word">
+                        {word.word}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="cloud">
-                  <div className="cloudHeader">Saved on the cloud:</div>
-                  {cloudSavedWords.map((word, word_i) => (
-                    <div key={`cloud_${word_i}`} className="word">
-                      {word.word}
-                    </div>
-                  ))}
+                <div className="dataManipulationButtons">
+                  <button
+                    onClick={() => {
+                      if (copyLocalToCloud) copyLocalToCloud();
+                    }}
+                  >
+                    copy local to cloud
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (copyCloudToLocal) copyCloudToLocal();
+                    }}
+                  >
+                    copy cloud to local
+                  </button>
                 </div>
-              </div>
+              </>
             )}
           {(cloudSavedWords === "loading" || localSavedWords === "loading") && (
             <div>loading</div>

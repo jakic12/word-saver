@@ -1,4 +1,5 @@
 import firebase from "../../firebase/firebase";
+import { deepEquals } from "../../utils";
 
 export const ADD_SAVED_WORD_REQUEST = "ADD_SAVED_WORD_REQUEST";
 export const ADD_SAVED_WORD_SUCCESS = "ADD_SAVED_WORD_SUCCESS";
@@ -18,35 +19,6 @@ export const HIDE_ERRORS = "HIDE_ERRORS";
 
 export const UPDATE_LOCAL_SAVED_WORDS = "UPDATE_LOCAL_SAVED_WORDS";
 export const UPDATE_CLOUD_SAVED_WORDS = "UPDATE_CLOUD_SAVED_WORDS";
-
-const deepEquals = (object1, object2) => {
-  if (!object1 || !object2) {
-    return false;
-  }
-  if (
-    typeof object1 === "object" &&
-    object1 !== null &&
-    object1 !== undefined
-  ) {
-    if (Object.keys(object1).length !== Object.keys(object2).length)
-      return false;
-
-    Object.keys(object1).forEach(key => {
-      if (!deepEquals(object1[key], object2[key])) return false;
-    });
-    return true;
-  } else {
-    if (
-      typeof object2 === "object" &&
-      object2 !== null &&
-      object2 !== undefined
-    ) {
-      // if object1 is object and object2 isn't
-      return false;
-    }
-    return object1 === object2;
-  }
-};
 
 export const addSavedWordRequest = index => {
   return { type: ADD_SAVED_WORD_REQUEST, index };

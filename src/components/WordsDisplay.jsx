@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import "../styles/wordsDisplay.scss";
+import { deepEquals } from "../utils";
 
 // components
 import Card from "../components/Card";
@@ -47,35 +48,6 @@ const WordsDisplay = ({
     }
 
     return false;
-  };
-
-  const deepEquals = (object1, object2) => {
-    if (!object1 || !object2) {
-      return false;
-    }
-    if (
-      typeof object1 === "object" &&
-      object1 !== null &&
-      object1 !== undefined
-    ) {
-      if (Object.keys(object1).length !== Object.keys(object2).length)
-        return false;
-
-      Object.keys(object1).forEach(key => {
-        if (!deepEquals(object1[key], object2[key])) return false;
-      });
-      return true;
-    } else {
-      if (
-        typeof object2 === "object" &&
-        object2 !== null &&
-        object2 !== undefined
-      ) {
-        // if object1 is object and object2 isn't
-        return false;
-      }
-      return object1 === object2;
-    }
   };
 
   return (

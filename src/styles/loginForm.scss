@@ -3,9 +3,10 @@
 .loginForm {
   height: 100%;
   width: 100%;
+  background: var(--loginRegisterBackground);
   &::before {
     content: "";
-    background: #29c5ff;
+    background: var(--accentColor);
     position: fixed;
     height: 50vh;
     width: 100vw;
@@ -17,13 +18,13 @@
     height: 100%;
     width: 100%;
     .middleCard {
-      background: white;
+      background: var(--background2);
       position: relative;
       max-width: calc(100% - 40px);
       min-width: 200px;
 
       .header {
-        border-bottom: 1px solid rgb(231, 231, 231);
+        border-bottom: 1px solid var(--borderColor);
         text-align: center;
         padding: 1em;
         h1 {
@@ -44,13 +45,14 @@
         align-items: center;
         input:not([type="submit"]) {
           width: 16em;
-          border: 1px solid rgb(231, 231, 231);
+          border: 1px solid var(--borderColor);
           margin: 10px;
           font-size: 1.1em;
           border-radius: 8px;
           padding: 10px;
           transition: box-shadow 0.5s;
-          //background: rgb(250, 250, 250);
+          background: var(--background2);
+          color: var(--textColor);
         }
         input:focus {
           outline: none;
@@ -64,21 +66,21 @@
 
           .register {
             text-decoration: none;
-            color: black;
+            color: var(--textColor);
             &:visited {
-              color: black;
+              color: var(--textColor);
             }
             &:hover {
-              background: #ffcf4b;
-              border-color: #ffcf4b;
+              background: var(--accentColor2);
+              border-color: var(--accentColor2);
             }
           }
           input[type="submit"] {
             border: none;
             background: none;
-            background: #29c5ff;
-            border-color: #29c5ff !important;
-            color: white;
+            background: var(--accentColor);
+            border-color: var(--accentColor) !important;
+            color: var(--accentTextColor);
           }
 
           input[type="submit"],
@@ -90,7 +92,7 @@
             margin: 10px;
             padding: 10px;
             border-radius: 8px;
-            border: 1px solid rgb(231, 231, 231);
+            border: 1px solid var(--borderColor);
             transition: box-shadow 0.5s;
 
             &:hover {

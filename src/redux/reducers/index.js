@@ -5,9 +5,11 @@ import { combineReducers } from "redux";
 import Account from "./Account";
 import Words from "./Words";
 import SavedWords from "./SavedWords";
+import Theme from "./Theme";
 
 export default combineReducers({
   account: Account,
   words: Words,
-  savedWords: SavedWords
+  savedWords: SavedWords,
+  theme: Theme
 });

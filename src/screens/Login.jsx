@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "../styles/login.scss";
 
@@ -10,6 +10,7 @@ import {
   setUser,
   logOut
 } from "../redux/actions/Account";
+import { setTheme } from "../redux/actions/Theme";
 
 // router
 import { Redirect, Route } from "react-router-dom";
@@ -22,6 +23,11 @@ import PasswordReset from "../components/PasswordReset";
 // firebase
 import firebase from "../firebase/firebase";
 
+import { setTheme as setCssTheme } from "../components/ThemeSwitch";
+import CacheManager from "../cache";
+
+const cache = new CacheManager();
+
 const Login = ({
   useAccount,
   setUseAccount,
@@ -30,8 +36,17 @@ const Login = ({
   userData,
   setUser,
   isLoggingIn,
-  logOutUser
+  logOutUser,
+  theme,
+  setTheme
 }) => {
+  setCssTheme(theme);
+  useEffect(() => {
+    cache.readData(`theme`).then(cachedTheme => {
+      setTheme(cachedTheme);
+    });
+  }, []);
+
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       setUser(user);
@@ -103,7 +118,7 @@ const SelectUseAccount = ({ setAccountCallback }) => {
 };
 
 const mapStateToProps = state => {
-  return state.account;
+  return Object.assign({}, state.account, state.theme);
 };
 
 const mapDispatchToProps = dispatch => {
@@ -119,6 +134,9 @@ const mapDispatchToProps = dispatch => {
     },
     logOutUser: () => {
       dispatch(logOut());
+    },
+    setTheme: theme => {
+      dispatch(setTheme(theme));
     }
   };
 };

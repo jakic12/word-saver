@@ -1,5 +1,7 @@
 .login {
   height: 100%;
+  background: var(--background2);
+  color: var(--textColor);
   .useAccountSelection {
     height: 100%;
     display: flex;
@@ -16,7 +18,7 @@
       }
 
       &:hover {
-        background-color: #c5d3e2;
+        background-color: var(--background1);
         cursor: pointer;
       }
 

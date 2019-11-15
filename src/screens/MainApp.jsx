@@ -16,6 +16,7 @@ import {
   updateLocallySavedWords,
   updateCloudSavedWords
 } from "../redux/actions/SavedWords";
+import { setTheme } from "../redux/actions/Theme";
 
 // local storage
 import CacheManager from "../cache";
@@ -27,6 +28,7 @@ import { Redirect } from "react-router-dom";
 import Card from "../components/Card";
 import WordsDisplay from "../components/WordsDisplay";
 import AccountSettings from "./AccountSettings";
+import { setTheme as setCssTheme } from "../components/ThemeSwitch";
 
 //firebase
 import firebase from "../firebase/firebase";
@@ -85,7 +87,6 @@ const tabs = [
                       out[k].uid = k;
                       return out[k];
                     });
-                    console.log(out, array);
                     resolve(array);
                   }
                   resolve([]);
@@ -130,14 +131,22 @@ const tabs = [
               }
             );
         }}
+        themes={[
+          { value: `light`, name: `light` },
+          { value: `dark`, name: `dark` }
+        ]}
+        selectedTheme={props.theme.theme}
+        setThemeCallback={props.setTheme}
       />
     )
   }
 ];
 
 const MainApp = props => {
-  const { account, words, savedWords, refreshSavedWordsState } = props;
+  const { account, words, savedWords, refreshSavedWordsState, theme } = props;
   const [selectedTab, setSelectedTab] = useState(0);
+
+  setCssTheme(theme.theme);
 
   useEffect(() => {
     if (account.useAccount) {
@@ -173,6 +182,9 @@ const MainApp = props => {
         }
       });
     }
+    cache.readData(`theme`).then(cachedTheme => {
+      props.setTheme(cachedTheme);
+    });
   }, []);
 
   if (
@@ -253,6 +265,9 @@ const mapDispatchToProps = dispatch => {
     },
     cloudToLocal: savedWords => {
       dispatch(updateLocallySavedWords(savedWords));
+    },
+    setTheme: theme => {
+      dispatch(setTheme(theme));
     }
   };
 };

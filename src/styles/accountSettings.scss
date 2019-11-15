@@ -1,4 +1,12 @@
 .accountSettings {
+  color: var(--textColor);
+  .card {
+    @media screen and (max-width: 450px) {
+      width: 100%;
+      height: 100%;
+      border-radius: none;
+    }
+  }
   height: 100%;
   width: 100%;
 
@@ -12,12 +20,13 @@
   align-items: center;
 
   .cardHeader {
-    background: white;
+    background: var(--background2);
     padding: 20px;
 
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 
     .cardField {
       display: flex;
@@ -26,46 +35,64 @@
       button {
         margin-left: 20px;
         padding: 10px;
-        background: #29c5ff;
+        background: var(--accentColor);
         border-radius: 8px;
         border: none;
-        color: white;
+        color: var(--accentTextColor);
       }
     }
   }
-
-  .data {
-    background: white;
+  .cardBodyField {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border-top: 1px solid rgb(129, 129, 129);
-    padding: 10px;
-    .word {
-      padding: 10px;
+    text-align: center;
+    background: var(--background2);
+    h1 {
+      margin: 10px;
     }
-    .local,
-    .cloud {
-      width: 50%;
+    .data {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .local {
+      flex-direction: row;
+      padding: 10px;
       .word {
+        padding: 10px;
       }
-      .localHeader {
+      .local,
+      .cloud {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .local {
+        .word {
+        }
+        .localHeader {
+        }
+      }
+
+      .cloud {
+        .word {
+        }
+        .cloudHeader {
+        }
       }
     }
 
-    .cloud {
-      .word {
-      }
-      .cloudHeader {
+    .themeSelect {
+      padding: 10px;
+      select {
+        width: 100%;
+        padding: 0.5em;
+        border-radius: 8px;
+        border: 1px solid var(--accentColor);
+        color: var(--textColor);
+        background: var(--background2);
       }
     }
   }
   .dataManipulationButtons {
-    border-top: 1px solid rgb(129, 129, 129);
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -73,16 +100,16 @@
 
     button {
       padding: 10px;
-      background: #29c5ff;
+      background: var(--accentColor);
+      color: var(--accentTextColor);
       border-radius: 8px;
       border: none;
-      color: white;
     }
   }
 }
 
 .setUseAccount {
   padding: 10px;
-  background: #29c5ff;
-  color: white;
+  background: var(--accentColor);
+  color: var(--accentTextColor);
 }

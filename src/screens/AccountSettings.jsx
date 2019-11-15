@@ -14,7 +14,10 @@ const AccountSettings = ({
   getCloudSavedWords,
   getLocalSavedWords,
   copyLocalToCloud,
-  copyCloudToLocal
+  copyCloudToLocal,
+  themes,
+  selectedTheme,
+  setThemeCallback
 }) => {
   const [cloudSavedWords, setCloudSavedWords] = useState(
     getCloudSavedWords ? "loading" : false
@@ -23,13 +26,9 @@ const AccountSettings = ({
     getLocalSavedWords ? "loading" : false
   );
 
-  //const createdAt = new Date(userData.metadata.creationTime);
-  console.log(cloudSavedWords, localSavedWords);
-
   useEffect(() => {
     getCloudSavedWords()
       .then(words => {
-        console.log(words);
         setCloudSavedWords(words);
       })
       .catch(e => {
@@ -49,7 +48,7 @@ const AccountSettings = ({
   return (
     <div className="accountSettings">
       {userData && (
-        <Card>
+        <Card className="card">
           <div className="cardHeader">
             <div className="cardField email">
               <div>{userData.email}</div>
@@ -63,39 +62,60 @@ const AccountSettings = ({
             Array.isArray(cloudSavedWords) &&
             Array.isArray(localSavedWords) && (
               <>
-                <div className="data">
-                  <div className="local">
-                    <div className="localHeader">Saved locally:</div>
-                    {localSavedWords.map((word, word_i) => (
-                      <div key={`local_${word_i}`} className="word">
-                        {word.word}
-                      </div>
-                    ))}
+                <div className="cardBodyField">
+                  <h1>Data</h1>
+                  <div className="data">
+                    <div className="local">
+                      <div className="localHeader">Saved locally:</div>
+                      {localSavedWords.map((word, word_i) => (
+                        <div key={`local_${word_i}`} className="word">
+                          {word.word}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="cloud">
+                      <div className="cloudHeader">Saved on the cloud:</div>
+                      {cloudSavedWords.map((word, word_i) => (
+                        <div key={`cloud_${word_i}`} className="word">
+                          {word.word}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="cloud">
-                    <div className="cloudHeader">Saved on the cloud:</div>
-                    {cloudSavedWords.map((word, word_i) => (
-                      <div key={`cloud_${word_i}`} className="word">
-                        {word.word}
-                      </div>
-                    ))}
+                  <div className="dataManipulationButtons">
+                    <button
+                      onClick={() => {
+                        if (copyLocalToCloud) copyLocalToCloud();
+                      }}
+                    >
+                      copy local to cloud
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (copyCloudToLocal) copyCloudToLocal();
+                      }}
+                    >
+                      copy cloud to local
+                    </button>
                   </div>
                 </div>
-                <div className="dataManipulationButtons">
-                  <button
-                    onClick={() => {
-                      if (copyLocalToCloud) copyLocalToCloud();
-                    }}
-                  >
-                    copy local to cloud
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (copyCloudToLocal) copyCloudToLocal();
-                    }}
-                  >
-                    copy cloud to local
-                  </button>
+                <div className="cardBodyField">
+                  <h1>Theme</h1>
+                  <div className="themeSelect">
+                    <select
+                      onChange={e => setThemeCallback(e.target.value)}
+                      value={selectedTheme}
+                    >
+                      {themes.map((theme, i) => (
+                        <option
+                          value={theme.value}
+                          key={`theme_select_option_${i}`}
+                        >
+                          {theme.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </>
             )}

@@ -21,7 +21,8 @@
     align-items: center;
   }
   .wordCard {
-    background: white;
+    background: var(--background2);
+    color: var(--textColor);
     margin: 1em;
     padding: 1em;
     .head {
@@ -118,7 +119,7 @@
                   max-height: 2.92em;
                   transition: max-height 0.5s;
                   .similar {
-                    color: #29c5ff;
+                    color: var(--accentColor);
                   }
                   .synonymBlock {
                     display: flex;
